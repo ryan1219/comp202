@@ -26,5 +26,20 @@ public class Image {
 	public int getWidth(){
 		return data[0].length;
 	}
+
+	public void flip(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public Pixel getPixel(int i, int j) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

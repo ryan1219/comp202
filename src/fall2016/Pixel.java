@@ -14,6 +14,18 @@ public class Pixel {
 		this.blue = blue;
 	}
 
+	public int getRed() {
+		return red;
+	}
+
+	public int getGreen() {
+		return green;
+	}
+
+	public int getBlue() {
+		return blue;
+	}
+
 	public Pixel(int intensity) {
 		if (intensity < 0 || intensity > 255) {
 			throw new IllegalArgumentException("pixel value out of range");

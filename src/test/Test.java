@@ -1,4 +1,7 @@
-package fall2016;
+package test;
+
+import fall2016.Image;
+import fall2016.Pixel;
 
 public class Test {
 
