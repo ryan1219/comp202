@@ -6,7 +6,7 @@ import fall2016.Pixel;
 public class Test {
 
 	public static void main(String[] args) {
-		Pixel p1 = new Pixel(20, 1000 ,20);
+		Pixel p1 = new Pixel(20, 100 ,20);
 	
 		Pixel[][] d = new Pixel[2][2];
 		
