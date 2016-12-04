@@ -20,7 +20,7 @@ public class Image {
 		for (int i = 0; i < data.length; i++) {
 			dataCopy[i] = new Pixel[data[i].length];
 			for (int j = 0; j < data[i].length; j++) {
-				dataCopy[i][j] = new Pixel(data[i][j].getRed(), data[i][j].getBlue(), data[i][j].getBlue());
+				dataCopy[i][j] = new Pixel(data[i][j].getRed(), data[i][j].getGreen(), data[i][j].getBlue());
 			}
 		}
 		return dataCopy;
@@ -79,6 +79,10 @@ public class Image {
 	}
 
 	public void crop(int startX, int startY, int endX, int endY) {
+		if(startX < 0 || startY < 0 || endX > getHeight() || endY > getWidth() || startX > endX || startY > endY){
+			throw new IllegalArgumentException();
+		}
+		
 		Pixel[][] croppedImage = new Pixel[endX - startX][endY - startY];
 		for (int i = 0; i < croppedImage.length; i++) {
 			for (int j = 0; j < croppedImage[i].length; j++) {
