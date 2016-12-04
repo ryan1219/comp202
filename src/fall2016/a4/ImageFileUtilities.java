@@ -9,9 +9,7 @@ import java.util.Scanner;
 public class ImageFileUtilities {
 	
 	public static void writePgm(Image image, String fileName) throws IOException {
-//		String fileLocation = "C:\\Users\\Administrator\\Desktop\\new_catskypegrey.pgm";
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(fileName)));
-//		System.out.println("write image first pixel point green:" + image.getPixel(0, 0).getGreen());
 		bw.write("P2\n");
 		bw.write(image.getMetadata() + "\n");
 		bw.write(image.getWidth() + " " + image.getHeight() + "\n");
@@ -26,9 +24,7 @@ public class ImageFileUtilities {
 	}
 	
 	public static void writePnm(Image image, String fileName) throws IOException {
-//		String fileLocation = "C:\\Users\\Administrator\\Desktop\\new_catskype.pnm";
 		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(fileName)));
-//		System.out.println("write image first pixel point green:" + image.getPixel(0, 0).getGreen());
 		bw.write("P3\n");
 		bw.write(image.getMetadata() + "\n");
 		bw.write(image.getWidth() + " " + image.getHeight() + "\n");
