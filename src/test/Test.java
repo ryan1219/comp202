@@ -2,9 +2,9 @@ package test;
 
 import java.io.IOException;
 
-import fall2016.Image;
-import fall2016.ImageFileUtilities;
-import fall2016.Pixel;
+import fall2016.a4.Image;
+import fall2016.a4.ImageFileUtilities;
+import fall2016.a4.Pixel;
 
 public class Test {
 

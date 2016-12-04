@@ -6,8 +6,8 @@
 package test;
 import java.util.Random;
 
-import fall2016.Image;
-import fall2016.Pixel;
+import fall2016.a4.Image;
+import fall2016.a4.Pixel;
 public class ImageGenerator {
   // Note: Change the number 1 below to any other number for different results. e.g. new Random(2);
   private static Random r = new Random(1);

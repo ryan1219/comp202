@@ -1,4 +1,4 @@
-package fall2016;
+package fall2016.a4;
 
 public class Pixel {
 	private int red;
