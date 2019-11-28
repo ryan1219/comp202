@@ -12,7 +12,7 @@ def which_delimiter(input):
 
 def stage_one(input_filename, output_filename):
     # out file
-    out_file = open(output_filename, 'w', encoding='utf - 8')
+    out_file = open(output_filename, 'w', encoding='utf-8')
     line_written = 0
     # Open file
     with open(input_filename, "r", encoding='utf-8') as fileHandler:
@@ -35,7 +35,7 @@ def stage_one(input_filename, output_filename):
 
 def stage_two(input_filename, output_filename):
     # out file
-    out_file = open(output_filename, 'w', encoding='utf - 8')
+    out_file = open(output_filename, 'w', encoding='utf-8')
     line_written = 0
     # Open file
     with open(input_filename, "r", encoding='utf-8') as fileHandler:
@@ -59,6 +59,6 @@ def stage_two(input_filename, output_filename):
     return line_written
 
 
-def has_numbers(inputString):
-    return any(char.isdigit() for char in inputString)
+def has_numbers(input_string):
+    return any(char.isdigit() for char in input_string)
 
