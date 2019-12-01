@@ -6,25 +6,30 @@ class Patient:
         self.num = int(num)
         self.day_diagnosed = int(day_diagnosed)
         self.age = int(age)
-        if sex_gender.startWith('M') or sex_gender.startWith('H') or sex_gender == 'BOY':
+        if sex_gender.startswith('M') or sex_gender.startswith('H') or sex_gender == 'BOY':
             self.sex_gender = 'M'
-        elif sex_gender.startWith('F') or sex_gender.startWith('W'):
+        elif sex_gender.startswith('F') or sex_gender.startswith('W' or sex_gender == 'GIRL'):
             self.sex_gender = 'F'
         else:
             self.sex_gender = 'X'
         self.postal = self.validate_postal(postal)
         self.state = state
         self.temps = [self.parse_temps(temps)]
-        self.days_symptomatic = days_symptomatic
+        self.days_symptomatic = int(days_symptomatic)
 
     def parse_temps(self, temps):
-        temps.replace(',', '.')
-        temps.replace(' ', '')
+        temps = temps.replace(',', '.')
+        temps = temps.replace('°', '')
+        temps = temps.replace(' ', '')
         new = ''
         for letter in temps:
             if not (letter.isalpha()):
                 new += letter
-        return float(new)
+        temps = float(new)
+        if temps > 45:
+            return (temps - 32) * 5 / 9
+        else:
+            return temps
 
     def validate_postal(self, postal):
         if len(postal) < 3 or postal == 'N.A.':
@@ -34,8 +39,9 @@ class Patient:
         return '000'
 
     def __str__(self):
-        return self.num + '\t' + self.age + '\t' + self.sex_gender + '\t' + self.postal + '\t' + self.day_diagnosed + \
-               '\t' + self.state + '\t' + self.days_symptomatic + '\t' + ';'.join(self.temps)
+        return str(self.num) + '\t' + str(self.age) + '\t' + self.sex_gender + '\t' + self.postal + '\t' \
+               + str(self.day_diagnosed) + '\t' + self.state + '\t' + str(self.days_symptomatic)\
+               + '\t' + ';'.join([str(x) for x in self.temps])
 
     def update(self, patient):
         if patient.num == self.num and patient.sex_gender == self.sex_gender and patient.postal == self.postal:
@@ -49,7 +55,7 @@ class Patient:
 def stage_four(input_filename, output_filename):
     # out file
     out_file = open(output_filename, 'w', encoding='utf-8')
-    patient_dic = {}
+    patient_dic = dict()
     # Open file
     with open(input_filename, "r", encoding='utf-8') as fileHandler:
         # Read each line in loop
@@ -60,12 +66,16 @@ def stage_four(input_filename, output_filename):
 
             new_patient = Patient(line_list[1], line_list[2], line_list[3], line_list[4], line_list[5],
                                   line_list[6], line_list[7], line_list[8])
-            if line_list[1] in patient_dic:
-                patient_dic[line_list[1]] = patient_dic[line_list[1]].update(new_patient)
-            else:
-                patient_dic[line_list[1]: new_patient]
 
-    for key, value in sorted(patient_dic.iteritems()):
+            # print(str(new_patient))
+            if line_list[1] in patient_dic:
+                exsisting_patient = patient_dic[line_list[1]]
+                exsisting_patient.update(new_patient)
+                patient_dic[line_list[1]] = exsisting_patient
+            else:
+                patient_dic[line_list[1]] = new_patient
+
+    for key, value in sorted(patient_dic.items()):
         out_file.write(str(value) + '\n')
 
     out_file.close()
@@ -78,23 +88,29 @@ def round_nearest5(x, base=5):
 
 def fatality_by_age(patient_dic):
     # {age: [deaths, recoveries]}
+    print(patient_dic)
     prob_fatality = {}
-    for key, value in sorted(patient_dic.iteritems()):
+    for key, value in sorted(patient_dic.items()):
         round_age = round_nearest5(value.age)
+
         if round_age in prob_fatality:
+            print('same age:', round_age)
             if value.state == 'R':
                 prob_fatality[round_age] = [prob_fatality[round_age][0], prob_fatality[round_age][1] + 1]
             if value.state == 'D':
                 prob_fatality[round_age] = [prob_fatality[round_age][0] + 1, prob_fatality[round_age][1]]
         else:
+            print('diff age:', round_age)
             if value.state == 'R':
                 prob_fatality[round_age] = [0, 1]
             if value.state == 'D':
                 prob_fatality[round_age] = [1, 0]
+            print()
 
+    # print(prob_fatality)
     age = []
     probability = []
-    for key, value in sorted(prob_fatality.iteritems()):
+    for key, value in sorted(prob_fatality.items()):
         age.append(key)
         probability.append(value[0]/(value[0]+value[1]))
     plt.plot(age, probability)
@@ -105,3 +121,11 @@ def fatality_by_age(patient_dic):
     plt.savefig('fatality_by_age.png')
 
     return probability
+
+# p = Patient('0', '0', '42', 'Woman', 'H3Z2B5', 'I', '102.2', '12')
+# p1 = Patient('0', '1', '42', 'F', 'H3Z', 'I', '40,0 C', '13')
+# p.update(p1)
+#
+# print(str(p))
+d = stage_four("10.3.out.txt", "10.4.out.txt")
+fatality_by_age(d)
