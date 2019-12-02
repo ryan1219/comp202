@@ -76,6 +76,7 @@ def plot_time_series(d):
     plt.savefig('time_series.png')
     return result
 
-d = stage_three("10.2.out.txt", "10.3.out.txt")
+
+d = stage_three("3000.2.out.txt", "3000.3.out.txt")
 plot_time_series(d)
 # print(date_diff('2019-10-31', '2019-10-2'))

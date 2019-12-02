@@ -8,7 +8,7 @@ class Patient:
         self.age = int(age)
         if sex_gender.startswith('M') or sex_gender.startswith('H') or sex_gender == 'BOY':
             self.sex_gender = 'M'
-        elif sex_gender.startswith('F') or sex_gender.startswith('W' or sex_gender == 'GIRL'):
+        elif sex_gender.startswith('F') or sex_gender.startswith('W') or sex_gender == 'GIRL':
             self.sex_gender = 'F'
         else:
             self.sex_gender = 'X'
@@ -18,6 +18,9 @@ class Patient:
         self.days_symptomatic = int(days_symptomatic)
 
     def parse_temps(self, temps):
+        if 'N' in temps and 'A' in temps:
+            return 0.0
+
         temps = temps.replace(',', '.')
         temps = temps.replace('°', '')
         temps = temps.replace(' ', '')
@@ -25,6 +28,9 @@ class Patient:
         for letter in temps:
             if not (letter.isalpha()):
                 new += letter
+        if new == '':
+            return 0.0
+
         temps = float(new)
         if temps > 45:
             return (temps - 32) * 5 / 9
@@ -49,6 +55,7 @@ class Patient:
             self.state = patient.state
             self.temps.append(patient.temps[0])
         else:
+            print(str(patient))
             raise AssertionError
 
 
@@ -69,9 +76,9 @@ def stage_four(input_filename, output_filename):
 
             # print(str(new_patient))
             if line_list[1] in patient_dic:
-                exsisting_patient = patient_dic[line_list[1]]
-                exsisting_patient.update(new_patient)
-                patient_dic[line_list[1]] = exsisting_patient
+                existing_patient = patient_dic[line_list[1]]
+                existing_patient.update(new_patient)
+                patient_dic[line_list[1]] = existing_patient
             else:
                 patient_dic[line_list[1]] = new_patient
 
@@ -88,26 +95,20 @@ def round_nearest5(x, base=5):
 
 def fatality_by_age(patient_dic):
     # {age: [deaths, recoveries]}
-    print(patient_dic)
     prob_fatality = {}
     for key, value in sorted(patient_dic.items()):
         round_age = round_nearest5(value.age)
-
         if round_age in prob_fatality:
-            print('same age:', round_age)
             if value.state == 'R':
                 prob_fatality[round_age] = [prob_fatality[round_age][0], prob_fatality[round_age][1] + 1]
             if value.state == 'D':
                 prob_fatality[round_age] = [prob_fatality[round_age][0] + 1, prob_fatality[round_age][1]]
         else:
-            print('diff age:', round_age)
             if value.state == 'R':
                 prob_fatality[round_age] = [0, 1]
             if value.state == 'D':
                 prob_fatality[round_age] = [1, 0]
-            print()
-
-    # print(prob_fatality)
+    print(prob_fatality)
     age = []
     probability = []
     for key, value in sorted(prob_fatality.items()):
@@ -127,5 +128,6 @@ def fatality_by_age(patient_dic):
 # p.update(p1)
 #
 # print(str(p))
-d = stage_four("10.3.out.txt", "10.4.out.txt")
-fatality_by_age(d)
+d = stage_four("3000.3.out.txt", "3000.4.out.txt")
+print(len(d))
+print(fatality_by_age(d))

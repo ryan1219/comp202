@@ -41,7 +41,7 @@ def stage_one(input_filename, output_filename):
     out_file.close()
     return line_written
 
-stage_one("./10.txt", "./10.1.out.txt")
+
 def stage_two(input_filename, output_filename):
     # out file
     out_file = open(output_filename, 'w', encoding='utf-8')
@@ -51,19 +51,25 @@ def stage_two(input_filename, output_filename):
         for line in fileHandler:
             # As each line (except last one) will contain new line character, so strip that
             line = line.strip()
-            line_list = line.split(which_delimiter(line))
+            line_list = line.split('\t')
             if len(line_list) == 9:
                 out_file.write(line + '\n')
             else:
-                temperature_list = line_list[7:len(line_list)-1]
-                temperature = temperature_list[0]
-                i = 1
-                while i < len(temperature_list):
-                    if has_numbers(temperature_list[i]):
-                        temperature = temperature + '.' + temperature_list[i].replace(' ', '')
-                    else:
-                        temperature = temperature + temperature_list[i].replace(' ', '')
-                    i += 1
+                # case: H4E 2S5     NON APPLICABLE
+                if len(line_list[5]) == len(line_list[6]) == 3 or line_list[6].startswith('A'):
+                    line_list[5] = line_list[5] + line_list[6]
+                    del line_list[6]
+                # case: temperature 39	1°C
+                if len(line_list) > 9:
+                    temperature_list = line_list[7:len(line_list)-1]
+                    temperature = temperature_list[0]
+                    i = 1
+                    while i < len(temperature_list):
+                        if has_numbers(temperature_list[i]):
+                            temperature = temperature + '.' + temperature_list[i].replace(' ', '')
+                        else:
+                            temperature = temperature + temperature_list[i].replace(' ', '')
+                        i += 1
                 out_file.write("\t".join(line_list[:7]) + '\t' + temperature + '\t' + line_list[len(line_list) - 1] + '\n')
             line_written += 1
 
@@ -75,4 +81,5 @@ def has_numbers(input_string):
     return any(char.isdigit() for char in input_string)
 
 
-stage_two("10.1.out.txt", "10.2.out.txt")
+stage_one("3000.txt", "3000.1.out.txt")
+stage_two("3000.1.out.txt", "3000.2.out.txt")
